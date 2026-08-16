@@ -22,13 +22,8 @@ jobs:
           git remote add upstream https://github.com/jangviktor-web/likeskill.git
           git fetch upstream
 
-      - name: Fast-forward sync (master)
+      - name: Rebase onto upstream (master)
         run: |
           git checkout master
-          if git merge --ff-only upstream/master; then
-            git push origin master
-            echo "Synced master to upstream/master"
-          else
-            echo "::warning::Not fast-forwardable (local commits?) - manual sync needed"
-            exit 1
-          fi
+          git rebase upstream/master   # fork 本地只有 workflow commit, 通常直接 fast-forward
+          git push --force-with-lease origin master
